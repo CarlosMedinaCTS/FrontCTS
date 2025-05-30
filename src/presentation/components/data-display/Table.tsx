@@ -25,17 +25,19 @@ function Table<T extends { id: React.Key }>({
 }: TableProps<T>) {
     return (
         <div className="w-full">
-            <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500 rounded-lg overflow-hidden">
+                <thead className="text-xs text-gray-700 bg-gray-100/70 border  border-gray-100">
                     <tr>
                         {columns.map((col) => (
                             <th key={col.key as string} className={col.className ?? "px-6 py-3"}>
-                                {col.label}
+                                <p className=" text-gray-500 font-medium ">
+                                    {col.label}
+                                </p>
                             </th>
                         ))}
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="border border-gray-100">
                     {data.map((row) => (
                         <tr key={row.id} className="bg-white border-b border-gray-100">
                             {columns.map((col) => (

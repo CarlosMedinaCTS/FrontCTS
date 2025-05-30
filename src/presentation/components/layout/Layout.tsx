@@ -19,7 +19,7 @@ const Layout = () => {
       h-screen
       overflow-hidden
       ${collapsed ? 'lg:grid-cols-[5rem_1fr]' : 'lg:grid-cols-[16rem_1fr]'}
-      ${type ? 'py-2 pr-2' : ''}
+      ${type ? 'py-2.5 pr-2.5' : ''}
    `}
          style={{ backgroundColor: color }}
       >
