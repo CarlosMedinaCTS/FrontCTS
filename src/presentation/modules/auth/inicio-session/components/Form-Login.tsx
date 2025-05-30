@@ -1,3 +1,4 @@
+import Button from "../../../../components/ui/Button";
 import useLogin from "../../../../hooks/auth/useLogin";
 import FormField from "./Form-Field";
 
@@ -50,10 +51,14 @@ const FormLogin = () => {
                 <p className="text-xs text-left text-primary underline">¿Olvidaste tu contraseña?</p>
             </div>
 
-            <button 
-                className="bg-linear-to-r from-gray-800 via-blue-700  to-gray-900 text-white w-full p-2 rounded-lg hover:scale-105 transition-all" 
+
+            <Button
                 type="submit"
-            >Iniciar Sesion</button>
+                style={{textAlign : 'center'}}
+                disabled={valid.email || valid.password ? true : false}
+            >
+                Iniciar Sesion
+            </Button>
 
         </form>
     )

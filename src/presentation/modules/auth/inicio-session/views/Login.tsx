@@ -6,9 +6,6 @@ import logo from "./../../../../assets/logo.png";
 const Login = () => {
   return (
     <main className="grid md:grid-cols-2 h-screen font-sans">
-
-
-
       <section className="flex items justify-center items-center">
         <div>
           <img src={logo} alt="Logo" className="w-46 h-10 mb-8 object-cover" />

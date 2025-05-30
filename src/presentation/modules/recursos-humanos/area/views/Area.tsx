@@ -1,13 +1,16 @@
-import { useState } from "react"
-import { IoSaveOutline } from "react-icons/io5"
-import Input from "../../../../components/ui/Input";
-import HeaderInfo from "../../../../components/data-display/Header-info";
 import { driver } from 'driver.js';
 import "driver.js/dist/driver.css";
+import { IoSaveOutline } from "react-icons/io5";
+import HeaderInfo from "../../../../components/data-display/Header-info";
+import Popover from "../../../../components/data-display/Popover";
+import Table from "../../../../components/data-display/Table";
+import Button from "../../../../components/ui/Button";
+import useToggle from "../../../../hooks/ui/useToggle";
+import FormuserComponent from "../components/Formuser.component";
 
 
 const Area = () => {
-  const [isModal, setIsModal] = useState(false);
+  const { isToggled, handleToggle } = useToggle()
 
   const driverObj = driver({
     showProgress: true,
@@ -22,7 +25,7 @@ const Area = () => {
           description: 'Modulo encargado de administrar las áreas, donde podrás agregar, editar y eliminar áreas según sea necesario.',
         }
       },
-            {
+      {
         element: '#puesto',
         popover: {
           title: 'Modulo Puestos',
@@ -40,22 +43,22 @@ const Area = () => {
   });
 
   return (
-    <section className="p-5 bg-white  sm:rounded-lg relative shadow-sm">
+    <section className=" bg-white relative">
 
       <HeaderInfo
         title="Recursos Humanos"
         subTitle="Áreas"
         description="lorem2020 dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum. lorem2020 dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum. lorem2020 dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum."
-        fn = { ()=> driverObj.drive() }
+        fn={() => driverObj.drive()}
       />
 
       <div className="flex justify-start items-center gap-4 mb-4 border-b-2 border-gray-200">
-        <button 
+        <button
           id="area"
           className="px-5 py-1 border-b-2 border-primary text-sm bg-white -mb-0.5 text-primary font-medium">
           Area
         </button>
-        <button 
+        <button
           id="puesto"
           className="px-5 py-1 text-sm bg-white">
           Puestos
@@ -93,139 +96,54 @@ const Area = () => {
             />
           </div>
 
-          <button
-            className="bg-linear-to-r from-gray-800 via-blue-700 to-gray-900 text-white px-4 py-2 rounded-lg flex items-center gap-3 text-sm"
-            onClick={() => setIsModal(true)}
+
+          <Button
+            onClick={handleToggle}
           >
             <IoSaveOutline className="text-lg" />
-            Agregar Area
-          </button>
-        </div>
-
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50  ">
-            <tr>
-              <th scope="col" className="p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-all-search"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 "
-                  />
-                  <label htmlFor="checkbox-all-search" className="sr-only">
-                    checkbox
-                  </label>
-                </div>
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Area
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Abreviación
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Alta
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Estatus
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Acciones
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="bg-white border-b border-gray-100">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500"
-                  />
-                  <label htmlFor="checkbox-table-search-1" className="sr-only">
-                    checkbox
-                  </label>
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap "
-              >
-                <div className="ps-3">
-                  <p className="font-normal text-gray-500">
-                    Tecnologias de la informacion y comunicaciín
-                  </p>
-                </div>
-              </th>
-              <td className="px-6 py-4">TI</td>
-              <td className="px-6 py-4">29-05-2025</td>
-              <td className="px-6 py-4">
-                <div className="flex items-center">
-                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2" />{" "}
-                  Activo
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600  hover:underline"
-                >
-                  Editar Area
-                </a>
-              </td>
-            </tr>
-
-          </tbody>
-        </table>
-        <div>
+            <span>Alta de Area</span>
+          </Button>
 
         </div>
+
+        <Table
+          columns={[
+            { key: 'id', label: 'ID', className: 'px-6 py-3' },
+            { key: 'name', label: 'Nombre del Area', className: 'px-6 py-3' },
+            { key: 'abbreviation', label: 'Abreviación', className: 'px-6 py-3' },
+            {
+              key: 'actions',
+              label: 'Acciones',
+              className: 'px-6 py-3',
+              render: () => (
+                <div className="flex items-center gap-2">
+                  <button className="text-blue-500 hover:text-blue-700">Editar</button>
+                  <button className="text-red-500 hover:text-red-700">Eliminar</button>
+                </div>
+              )
+            }
+          ]}
+          data={[
+            { id: 1, name: 'Recursos Humanos', abbreviation: 'RH' },
+            { id: 2, name: 'Finanzas', abbreviation: 'FIN' },
+            { id: 3, name: 'Marketing', abbreviation: 'MKT' }
+          ]}
+          page={1}
+          totalPages={1}
+          onPageChange={() => { }}
+
+        />
       </div>
-      
+
 
       {
-        isModal &&
-        <div className="fixed bg-white top-0 right-0 w-[28rem] h-screen px-5 py-10 shadow-sm">
-          <button
-            onClick={() => setIsModal(false)}
-            className="absolute top-5 right-5 text-gray-500 hover:text-gray-800 transition-colors bg-gray-100 px-2 rounded-lg border border-gray-200"
-          >
-            x
-          </button>
-          <h3 className="font-medium text-gray-800 text-xl">Alta de Areas</h3>
-          <p className="text-xs text-gray-500 my-2">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Neque beatae consequatur sint, id sunt laudantium perspiciatis adipisci fugiat culpa alias.</p>
-          <hr className="border border-gray-100 my-4" />
-
-
-          <form action="">
-            <div className="mb-4">
-              <label htmlFor="area" className="block text-sm font-medium text-gray-700 mb-2">Nombre del Area</label>
-              <Input
-                type="text"
-                id="area"
-                placeholder="Ingresa el nombre del area"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="abreviación" className="block text-sm font-medium text-gray-700 mb-2">Abreviación</label>
-              <Input
-                type="text"
-                id="area"
-                placeholder="Ingresa la abreviación del area"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="bg-linear-to-r from-gray-800 via-blue-700 to-gray-900 text-white px-4 py-2 rounded-lg flex items-center gap-3 text-sm hover:scale-105 transition-all"
-            >
-              <IoSaveOutline className="text-lg" />
-              Guardar Area
-            </button>
-          </form>
-        </div>
+        isToggled &&
+        <Popover
+          title="Alta de Area"
+          onClose={handleToggle}
+        >
+          <FormuserComponent />
+        </Popover>
       }
     </section>
   )
