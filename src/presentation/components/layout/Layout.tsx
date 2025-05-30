@@ -12,7 +12,7 @@ import { IoIosColorFilter } from "react-icons/io";
 const Layout = () => {
    const [collapsed, setCollapsed] = useState(false);
    const [color, setColor] = useState<string>(colors.obsidian);
-   const [type, setType] = useState<boolean>(false); // Assuming this is used somewhere in the future
+   const [type, setType] = useState<boolean>(true); // Assuming this is used somewhere in the future
    const { isToggled, handleToggle } = useToggle();
 
    return (

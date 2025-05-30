@@ -10,6 +10,7 @@ const Navbar = ( { onOpen } : Props ) => {
             <div className="w-90 ">
                 <Input placeholder="Buscar Modulo ... " />
             </div>
+            
             <div className="flex items-center gap-5">
                 <button
                     onClick={onOpen}
