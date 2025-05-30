@@ -31,13 +31,11 @@ const Layout = () => {
             />
          </div>
 
-         <section className={`${type ? 'h-[98dvh] rounded-2xl' : 'h-screen'} bg-white  w-full  flex flex-col  overflow-hidden px-5`}>
+         <section className={`${type ? 'h-[98dvh] rounded-2xl' : 'h-screen'} bg-white  w-full  flex flex-col  px-5 overflow-auto`}>
             <Navbar
                onOpen={handleToggle}
             />
-            <div className="flex-1 min-h-0 overflow-y-auto ">
-               <Outlet />
-            </div>
+            <Outlet />
          </section>
 
          {
