@@ -1,4 +1,4 @@
-import { Typography } from "../../../../components/ui/Typography";
+import { Typography } from "../../../../components/ui/typography/Typography";
 import FormLogin from "../components/Form-Login";
 import ImageLogin from "../components/Image-Login";
 import logo from "./../../../../assets/logo.png";

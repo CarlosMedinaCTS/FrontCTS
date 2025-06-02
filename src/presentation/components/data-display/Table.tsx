@@ -49,7 +49,6 @@ function Table<T extends { id: React.Key }>({
                     ))}
                 </tbody>
             </table>
-            {/* Paginado solo estilo */}
             <div className="flex justify-end items-center gap-2 mt-4">
                 <button
                     className="px-3 py-1 rounded border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"

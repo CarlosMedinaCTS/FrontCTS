@@ -31,7 +31,7 @@ const Layout = () => {
             />
          </div>
 
-         <section className={`${type ? 'h-[98dvh] rounded-2xl' : 'h-screen'} bg-white  w-full  flex flex-col  px-5 overflow-auto`}>
+         <section className={`${type ? 'h-[98dvh] rounded-2xl' : 'h-screen'} bg-gray-50  w-full  flex flex-col  px-5 overflow-auto`}>
             <Navbar
                onOpen={handleToggle}
             />

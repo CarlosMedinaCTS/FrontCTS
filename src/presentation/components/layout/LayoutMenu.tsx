@@ -1,6 +1,6 @@
 import { BiFoodMenu } from "react-icons/bi";
 import { IoIosColorFilter } from "react-icons/io";
-import { Typography } from "../ui/Typography";
+import { Typography } from "../ui/typography/Typography";
 
 interface LayoutPanelProps {
   setType: (type: boolean) => void;

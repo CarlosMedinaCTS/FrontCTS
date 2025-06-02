@@ -1,4 +1,4 @@
-import { Typography } from "../ui/Typography"
+import { Typography } from "../ui/typography/Typography"
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { FaInfo } from "react-icons/fa6";
 interface Props {

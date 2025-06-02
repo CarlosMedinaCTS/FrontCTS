@@ -1,5 +1,5 @@
 import { IoClose } from "react-icons/io5"
-import { Typography } from "../ui/Typography"
+import { Typography } from "../ui/typography/Typography"
 import type { PropsWithChildren } from "react"
 
 interface Props extends PropsWithChildren {

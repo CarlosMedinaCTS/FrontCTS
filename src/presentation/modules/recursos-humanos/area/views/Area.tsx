@@ -1,70 +1,17 @@
-import { driver } from 'driver.js';
 import "driver.js/dist/driver.css";
 import { IoSaveOutline } from "react-icons/io5";
-import HeaderInfo from "../../../../components/data-display/Header-info";
 import Popover from "../../../../components/data-display/Popover";
 import Table from "../../../../components/data-display/Table";
-import Button from "../../../../components/ui/Button";
+import Button from "../../../../components/ui/buttons/Button";
 import useToggle from "../../../../hooks/ui/useToggle";
 import FormuserComponent from "../components/Formuser.component";
 
 
 const Area = () => {
-  const { isToggled, handleToggle } = useToggle()
-
-  const driverObj = driver({
-    showProgress: true,
-    nextBtnText: "Siguiente",
-    prevBtnText: "Anterior",
-    doneBtnText: "Listo",
-    steps: [
-      {
-        element: '#area',
-        popover: {
-          title: 'Modulo Area',
-          description: 'Modulo encargado de administrar las áreas, donde podrás agregar, editar y eliminar áreas según sea necesario.',
-        }
-      },
-      {
-        element: '#puesto',
-        popover: {
-          title: 'Modulo Puestos',
-          description: 'Modulo encargado de administrar los puestos de trabajo dentro de las áreas, donde podrás agregar, editar y eliminar puestos según sea necesario.',
-        }
-      },
-      {
-        element: '#table-search-users',
-        popover: {
-          title: 'Barra de busqueda',
-          description: 'Filtro para buscar áreas específicas. Puedes buscar por nombre o abreviación.',
-        }
-      },
-    ]
-  });
+  const { isToggled, handleToggle } = useToggle();
 
   return (
     <section className=" bg-white relative">
-
-      <HeaderInfo
-        title="Recursos Humanos"
-        subTitle="Áreas"
-        description="lorem2020 dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum. lorem2020 dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum. lorem2020 dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum."
-        fn={() => driverObj.drive()}
-      />
-
-      <div className="flex justify-start items-center gap-4 mb-4 border-b-2 border-gray-200">
-        <button
-          id="area"
-          className="px-5 py-1 border-b-2 border-primary text-sm bg-white -mb-0.5 text-primary font-medium">
-          Area
-        </button>
-        <button
-          id="puesto"
-          className="px-5 py-1 text-sm bg-white">
-          Puestos
-        </button>
-      </div>
-
       <div className="relative overflow-x-auto">
         <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white ">
           <label htmlFor="table-search" className="sr-only">
@@ -135,6 +82,7 @@ const Area = () => {
         />
       </div>
 
+     
 
       {
         isToggled &&

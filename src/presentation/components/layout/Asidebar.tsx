@@ -36,7 +36,7 @@ const routes: Route[] = [
     icon: <TbLayoutDashboard className="w-6 h-6 stroke-[1.5] text-inherit " />,
     isExpandable: true,
     subRoutes: [
-      { name: "Reporte Gerencial", path: "recursos/alta-areda", isActive: false },
+      { name: "Reporte Gerencial", path: "dashboard/reporte", isActive: false },
       { name: "Reporte Ventas", path: "/recursos/empleados" },
     ],
   },
@@ -46,8 +46,8 @@ const routes: Route[] = [
     icon: <FaRegUser className="w-4 h-5 stroke-[1.5] text-inherit" />,
     isExpandable: true,
     subRoutes: [
-      { name: "Alta Areas", path: "recursos/alta-area", isActive: true },
-      { name: "Alta Empleados", path: "/recursos/empleados" },
+      { name: "Alta", path: "recursos/alta-area" },
+      { name: "Alta Empleados", path: "recursos/empleados" },
     ],
   },
   {
@@ -162,6 +162,7 @@ function SidebarPopover({
               .find((r) => r.path === hoveredSubmenu)
               ?.subRoutes?.map((subRoute) => (
                 <NavLink
+                  
                   key={subRoute.path}
                   to={subRoute.path}
                   onClick={() => handleRouteClick(subRoute.path)}
@@ -173,6 +174,7 @@ function SidebarPopover({
                     }`
                   }
                   style={{ color: "#fff" }}
+                  end
                 >
                   {subRoute.name}
                 </NavLink>
@@ -236,6 +238,7 @@ function SidebarNav({
                     }
                     onClick={() => handleRouteClick(route.path)}
                     style={{ color: "#fff" }}
+                    end
                   >
                     {route.name}
                   </NavLink>
@@ -296,6 +299,7 @@ function SidebarNav({
                           }`
                         }
                         style={{ color: "#fff" }}
+                        end
                       >
                         {subRoute.name}
                       </NavLink>
@@ -354,7 +358,6 @@ export default function Sidebar({ collapsed, setCollapsed, color }: Props) {
     }
   };
 
-  // Estilos dinámicos para el color de fondo y texto
   const asideStyle: React.CSSProperties = {
     backgroundColor: color,
     color: "#fff"
