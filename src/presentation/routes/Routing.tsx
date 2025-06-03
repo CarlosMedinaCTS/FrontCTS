@@ -2,9 +2,9 @@ import { BrowserRouter, Route, Routes } from "react-router"
 import Login from "../modules/auth/inicio-session/views/Login"
 import { ToastContainer } from "react-toastify"
 import Layout from "../components/layout/Layout"
-import Altas from "../modules/recursos-humanos/altas/View/Altas"
 import Productividad from "../modules/dashboard/productividad/views/Productividad"
 import Empleado from "../modules/recursos-humanos/empleado/views/Empleado"
+import Altas from "../modules/recursos-humanos/group/View/Altas"
 
 
 const Routing = () => {

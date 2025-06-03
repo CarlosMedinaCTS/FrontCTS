@@ -46,8 +46,10 @@ const routes: Route[] = [
     icon: <FaRegUser className="w-4 h-5 stroke-[1.5] text-inherit" />,
     isExpandable: true,
     subRoutes: [
-      { name: "Alta", path: "recursos/alta-area" },
-      { name: "Alta Empleados", path: "recursos/empleados" },
+      { name: "Areas", path: "recursos/alta-area" },
+      { name: "Empleados", path: "recursos/empleados" },
+      { name: "Sedes", path: "recursos/sedes" },
+      { name: "Productividad", path: "recursos/productividad" },
     ],
   },
   {

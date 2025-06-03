@@ -7,7 +7,7 @@ import Puesto from "../../puesto/view/Puesto";
 const Altas = () => {
     const tabsContent = [
         { id: 1, label: "Area", content: <Area /> },
-        { id: 2, label: "Puestos", content: <Puesto/> }
+        { id: 2, label: "Puestos", content: <Puesto /> }
     ];
 
     const driverObj = driver({
@@ -47,7 +47,7 @@ const Altas = () => {
                 description="lorem2020 dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum. lorem2020 dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum. lorem2020 dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum."
                 fn={() => driverObj.drive()}
             />
-            
+
             <Tabs
                 tabsContent={tabsContent}
                 initialTabId={1}

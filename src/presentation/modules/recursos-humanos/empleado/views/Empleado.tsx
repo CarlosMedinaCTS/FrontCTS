@@ -4,9 +4,8 @@ import Button from "../../../../components/ui/buttons/Button"
 import useToggle from "../../../../hooks/ui/useToggle";
 import HeaderInfo from "../../../../components/data-display/Header-info";
 import { driver } from "driver.js";
-import Popover from "../../../../components/data-display/Popover";
-import FormuserComponent from "../../area/components/Formuser.component";
 import FormEmpleadoComponent from "../components/FormEmpleado.component";
+import Modal from "../../../../components/data-display/Modal";
 
 const Empleado = () => {
     const { isToggled, handleToggle } = useToggle();
@@ -116,15 +115,17 @@ const Empleado = () => {
 
                 />
             </div>
-
+            
             {
                 isToggled &&
-                <Popover
-                    title="Alta de Empleados"
+                <Modal
+                    open={isToggled}
                     onClose={handleToggle}
+                    title="Agregar un nuevo empleado"
+                    paragraph="Gestiona sin esfuerzo el alta de nuevo personal"
                 >
-                    <FormEmpleadoComponent />
-                </Popover>
+                    <FormEmpleadoComponent/>
+                </Modal>
             }
         </div>
     )
