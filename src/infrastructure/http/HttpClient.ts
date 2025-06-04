@@ -31,11 +31,22 @@ export class HttpClient {
                 ...fetchOptions,
                 signal: AbortSignal.timeout(5000),
             });
-
             if (!response.ok) {
+                let errorMsg = `HTTP error! status: ${response.status}`;
+                try {
+                    const errorBody = await response.json();
+                    // Puedes ajustar esto según la estructura de tu backend
+                    errorMsg = errorBody.message
+                        ? Array.isArray(errorBody.message)
+                            ? errorBody.message.join(", ")
+                            : errorBody.message
+                        : errorMsg;
+                } catch {
+                    // Si no se puede parsear el JSON, deja el mensaje por defecto
+                }
                 return {
                     data: null,
-                    error: `HTTP error! status: ${response.status}`,
+                    error: errorMsg,
                 };
             }
 

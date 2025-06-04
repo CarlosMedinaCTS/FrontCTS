@@ -20,7 +20,7 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
 const Input = forwardRef<HTMLInputElement, InputProps>(({ className = "", ...props }, ref) => (
   <input
     ref={ref}
-    className={`bg-grayText flex p-2 rounded-lg w-full border border-gray-100 placeholder:text-sm text-gray-800 ${className}`}
+    className={`bg-grayText flex p-2 rounded-lg w-full border border-gray-100 placeholder:text-sm text-gray-800 ${className} placeholder:text-xs`}
     {...props}
   />
 ));

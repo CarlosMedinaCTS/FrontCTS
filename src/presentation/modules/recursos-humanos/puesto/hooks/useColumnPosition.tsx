@@ -1,19 +1,18 @@
-import type { Department } from '@/domain/entities/rh';
-import { formatted } from '@/presentation/utils';
+import type { Position } from '@/domain/entities/rh';
 import type { ColumnDef } from '@tanstack/react-table';
 import { useMemo } from 'react'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { RxDotsVertical } from "react-icons/rx";
 import { MdDelete, MdEdit } from "react-icons/md";
-import type { DepartmentAction } from '../views/Area';
+import type { DepartmentAction } from '../view/Puesto';
 
 
 
 interface Props {
     handleAction: (args: DepartmentAction) => void
 }
-const useColumnDepartament = ({ handleAction }: Props) => {
-    return useMemo<ColumnDef<Department>[]>(() => [
+const useColumnPosition = ({ handleAction }: Props) => {
+    return useMemo<ColumnDef<Position>[]>(() => [
         {
             accessorKey: "id",
             header: "ID",
@@ -21,30 +20,42 @@ const useColumnDepartament = ({ handleAction }: Props) => {
         },
         {
             accessorKey: "name",
-            header: "Nombre del Área",
+            header: "Posición",
             cell: info => info.getValue(),
         },
         {
-            accessorKey: "abreviation",
-            header: "Abreviación",
-            cell: info => info.getValue(),
-        },
-        {
-            id: "updated_at",
-            header: "Ultima actualización",
+            accessorKey: "department.name",
+            header: "Nombre de departamento",
             cell: info => (
                 <span className="" >
-                    {formatted(info.row.original?.updated_at)
-                    }
+                    {info.row?.original?.department?.name || ''}
                 </span>
             ),
         },
         {
-            id: "status",
-            header: "Estatus",
-            cell: () => (
-                <span className="bg-green-500/10 px-2 rounded-xl text-green-500 text-xs border border-green-200" >
-                    activo
+            accessorKey: "department.abreviation",
+            header: "Abreviacion",
+            cell: info => (
+                <span className="" >
+                    {info.row?.original?.department?.abreviation || ''}
+                </span>
+            ),
+        },
+        {
+            accessorKey: "salary.amount",
+            header: "Salario",
+            cell: info => (
+                <span className="" >
+                    {info.row?.original?.salary?.amount || ''}
+                </span>
+            ),
+        },
+        {
+            accessorKey: "salary.salary_in_words",
+            header: "Salario texto",
+            cell: info => (
+                <span className="" >
+                    {info.row?.original?.salary?.salary_in_words || ''}
                 </span>
             ),
         },
@@ -59,8 +70,8 @@ const useColumnDepartament = ({ handleAction }: Props) => {
                         </MenuButton>
                         <MenuItems anchor="bottom" className="bg-white px-4 py-2 flex flex-col gap-1 border border-gray-100 outline-none rounded-lg text-gray-700">
                             <MenuItem>
-                                <button 
-                                    onClick={()=> handleAction({ ...info.row.original, type: 'edit' }) }
+                                <button
+                                    onClick={() => handleAction({ ...info.row.original, type: 'edit' })}
                                     className="py-1 hover:bg-gray-100 flex items-center gap-4 px-2 rounded-lg">
                                     <MdEdit />
                                     Editar
@@ -68,8 +79,8 @@ const useColumnDepartament = ({ handleAction }: Props) => {
                             </MenuItem>
                             <hr className='border-b border-dotted border-gray-200' />
                             <MenuItem>
-                                <button 
-                                    onClick={()=> handleAction({ ...info.row.original, type: 'delete' }) }
+                                <button
+                                    onClick={() => handleAction({ ...info.row.original, type: 'delete' })}
                                     className="py-1 hover:bg-gray-100 flex items-center gap-4 px-2 rounded-lg text-red-400">
                                     <MdDelete />
                                     Eliminar
@@ -83,4 +94,4 @@ const useColumnDepartament = ({ handleAction }: Props) => {
     ], [handleAction]);
 }
 
-export default useColumnDepartament
+export default useColumnPosition

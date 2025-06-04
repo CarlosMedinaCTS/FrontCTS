@@ -7,9 +7,14 @@ const useToggle = () => {
     const handleToggle = () => {
         setIsToggled(!isToggled);
     }
+
+    const handleManual = (type : boolean)=> {
+        setIsToggled(type)
+    }
     return {
         handleToggle,
-        isToggled
+        isToggled,
+        handleManual
     }
 }
 
