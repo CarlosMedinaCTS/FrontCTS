@@ -27,8 +27,7 @@ const useLogin = () => {
             toast.error("Por favor completa todos los campos.");
             return;
         }
-        toast.success("Funcionalidad no implementada");
-        navigation("/Inicio");
+        navigation("/inicio/dashboard/reporte");
     };
 
     return {

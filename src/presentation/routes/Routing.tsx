@@ -14,8 +14,8 @@ const Routing = () => {
       <Routes>
         <Route index element={<Login />} />
 
-        <Route path="Inicio" element={<Layout />}  >
-          <Route path="dashboard/reporte" element={<Productividad />} />
+        <Route path="Inicio"  element={<Layout />}  >
+          <Route index path="dashboard/reporte" element={<Productividad />} />
           <Route path="recursos/alta-area" element={<Altas />} />
           <Route path="recursos/empleados" element={<Empleado />} />
         </Route>

@@ -17,7 +17,7 @@ const Popover = ({ title ,onClose, children }: Props) => {
 
                 <button 
                     onClick={onClose}
-                    className="text-gray-500 text-xl bg-gray-100 p-1 rounded-lg border border-gray-200">
+                    className="transition-all text-gray-500 text-xl bg-gray-100 p-1 rounded-lg border border-gray-200 cursor-pointer hover:scale-105 hover:rotate-90">
                     <IoClose />
                 </button>
             </div>

@@ -1,8 +1,12 @@
 import { driver } from "driver.js";
-import HeaderInfo from "../../../../components/data-display/Header-info"
-import Tabs from "../../../../components/ui/tabs/Tabs"
+
+import Tabs from "@/presentation/components/ui/tabs/Tabs";
+import HeaderInfo from "@/presentation/components/data-display/Header-info";
 import Area from "../../area/views/Area";
 import Puesto from "../../puesto/view/Puesto";
+
+
+
 
 const Altas = () => {
     const tabsContent = [
@@ -39,6 +43,7 @@ const Altas = () => {
             },
         ]
     });
+
     return (
         <div className="bg-white px-5 py-2 rounded-lg border border-gray-200">
             <HeaderInfo

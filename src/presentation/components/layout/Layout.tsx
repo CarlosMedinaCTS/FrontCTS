@@ -6,10 +6,11 @@ import Popover from "../data-display/Popover";
 import Sidebar from "./Asidebar";
 import Navbar from "./Navbar";
 import { ColorPanel, LayoutPanel } from "./LayoutMenu";
+const DEFAULT_COLOR = colors.obsidian;
 
 const Layout = () => {
    const [collapsed, setCollapsed] = useState(false);
-   const [color, setColor] = useState<string>(colors.obsidian);
+   const [color, setColor] = useState<string>(DEFAULT_COLOR);
    const [type, setType] = useState<boolean>(true);
    const { isToggled, handleToggle } = useToggle();
 

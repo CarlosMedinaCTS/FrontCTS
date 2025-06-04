@@ -6,3 +6,14 @@ export const colors = {
   mutedTeal: '#4B6B6B',
   dustyPurple: '#5C4B66'
 };
+
+
+export const formatted = (date: string | Date) => {
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("es-MX", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  });
+};

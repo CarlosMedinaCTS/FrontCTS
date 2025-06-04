@@ -1,4 +1,5 @@
-import { useState, useRef, type JSX } from "react";
+import { useState, useRef, useMemo, useCallback, type JSX, memo } from "react";
+import { useLocation } from "react-router";
 import {
   LuBox,
   LuLaptop
@@ -28,7 +29,7 @@ interface Route {
   isExpandable?: boolean;
 }
 
-// Rutas
+// Memoiza rutas
 const routes: Route[] = [
   {
     name: "Dashboard",
@@ -36,8 +37,7 @@ const routes: Route[] = [
     icon: <TbLayoutDashboard className="w-6 h-6 stroke-[1.5] text-inherit " />,
     isExpandable: true,
     subRoutes: [
-      { name: "Reporte Gerencial", path: "dashboard/reporte", isActive: false },
-      { name: "Reporte Ventas", path: "/recursos/empleados" },
+      { name: "Reporte Gerencial", path: "dashboard/reporte" },
     ],
   },
   {
@@ -57,27 +57,27 @@ const routes: Route[] = [
     path: "/recursos-materiales",
     icon: <LuBox className="w-6 h-6 stroke-[1.5] text-inherit" />,
     isExpandable: true,
-    subRoutes: [{ name: "Alta Areas", path: "/recursos/alta-area", isActive: false }],
+    subRoutes: [{ name: "Alta Areas", path: "/recursos/alta-area" }],
   },
   {
     name: "Saga",
     path: "/saga",
     icon: <LuLaptop className="w-6 h-6 stroke-[1.5] text-inherit" />,
     isExpandable: true,
-    subRoutes: [{ name: "Alta Areas", path: "/recursos/alta-area", isActive: false }],
+    subRoutes: [{ name: "Alta Areas", path: "/recursos/alta-area" }],
   },
   {
     name: "Marketing",
     path: "/marketing",
     icon: <RiUserVoiceLine className="w-4 h-4 stroke-[.5] text-inherit" />,
     isExpandable: true,
-    subRoutes: [{ name: "Comunicado", path: "/recursos/alta-area", isActive: false }],
+    subRoutes: [{ name: "Comunicado", path: "/recursos/alta-area" }],
   },
 ];
 
 // COMPONENTES ATÓMICOS
 
-function SidebarHeader({ collapsed, toggleCollapse }: { collapsed: boolean; toggleCollapse: () => void }) {
+const SidebarHeader = memo(function SidebarHeader({ collapsed, toggleCollapse }: { collapsed: boolean; toggleCollapse: () => void }) {
   return (
     <div
       className={`p-4 border-b border-white/20 flex ${collapsed ? "justify-center" : "justify-between"} items-center overflow-hidden mb-3`}
@@ -106,9 +106,9 @@ function SidebarHeader({ collapsed, toggleCollapse }: { collapsed: boolean; togg
       )}
     </div>
   );
-}
+});
 
-function SidebarUser({ collapsed }: { collapsed: boolean }) {
+const SidebarUser = memo(function SidebarUser({ collapsed }: { collapsed: boolean }) {
   return (
     <div className={`p-4 border-t border-white/20 flex items-center ${collapsed ? "justify-center" : "gap-3"}`}>
       <div className="relative group bg-yellow-500 p-2 rounded-full text-white w-10 h-10 flex items-center justify-center text-sm font-medium">
@@ -128,9 +128,9 @@ function SidebarUser({ collapsed }: { collapsed: boolean }) {
       )}
     </div>
   );
-}
+});
 
-function SidebarPopover({
+const SidebarPopover = memo(function SidebarPopover({
   collapsed,
   hoveredSubmenu,
   popoverStyle,
@@ -164,7 +164,6 @@ function SidebarPopover({
               .find((r) => r.path === hoveredSubmenu)
               ?.subRoutes?.map((subRoute) => (
                 <NavLink
-                  
                   key={subRoute.path}
                   to={subRoute.path}
                   onClick={() => handleRouteClick(subRoute.path)}
@@ -186,9 +185,9 @@ function SidebarPopover({
       )}
     </>
   );
-}
+});
 
-function SidebarNav({
+const SidebarNav = memo(function SidebarNav({
   collapsed,
   routes,
   activeRoute,
@@ -315,32 +314,43 @@ function SidebarNav({
       </ul>
     </nav>
   );
-}
+});
 
 export default function Sidebar({ collapsed, setCollapsed, color }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedRoutes, setExpandedRoutes] = useState<string[]>([]);
-  const [activeRoute, setActiveRoute] = useState("/dashboard");
   const [hoveredSubmenu, setHoveredSubmenu] = useState<string | null>(null);
   const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0 });
   const menuItemRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
-  const toggleSidebar = () => setIsOpen(!isOpen);
-  const toggleCollapse = () => setCollapsed(!collapsed);
+  const location = useLocation();
 
-  const toggleSubMenu = (routePath: string) => {
-    setExpandedRoutes((prev) =>
-      prev.includes(routePath) ? prev.filter((path) => path !== routePath) : [...prev, routePath],
+  // Memoiza estilos
+  const asideStyle = useMemo(() => ({
+    backgroundColor: color,
+    color: "#fff"
+  }), [color]);
+
+  const popoverStyle = useMemo(() => ({
+    backgroundColor: color,
+    color: "#fff",
+    top: `${popoverPosition.top}px`,
+    left: `${popoverPosition.left}px`
+  }), [color, popoverPosition]);
+
+  // Memoiza handlers
+  const toggleSidebar = useCallback(() => setIsOpen(v => !v), []);
+  const toggleCollapse = useCallback(() => setCollapsed(v => !v), [setCollapsed]);
+  const toggleSubMenu = useCallback((routePath: string) => {
+    setExpandedRoutes(prev =>
+      prev.includes(routePath) ? prev.filter(path => path !== routePath) : [...prev, routePath]
     );
-  };
-
-  const handleRouteClick = (path: string) => {
-    setActiveRoute(path);
+  }, []);
+  const handleRouteClick = useCallback(() => {
     setIsOpen(false);
     setHoveredSubmenu(null);
-  };
-
-  const handleMouseEnter = (routePath: string) => {
+  }, []);
+  const handleMouseEnter = useCallback((routePath: string) => {
     if (collapsed && routes.find((r) => r.path === routePath)?.subRoutes) {
       const element = menuItemRefs.current[routePath];
       if (element) {
@@ -352,25 +362,10 @@ export default function Sidebar({ collapsed, setCollapsed, color }: Props) {
         setHoveredSubmenu(routePath);
       }
     }
-  };
-
-  const handleMouseLeave = () => {
-    if (collapsed) {
-      setHoveredSubmenu(null);
-    }
-  };
-
-  const asideStyle: React.CSSProperties = {
-    backgroundColor: color,
-    color: "#fff"
-  };
-
-  const popoverStyle: React.CSSProperties = {
-    backgroundColor: color,
-    color: "#fff",
-    top: `${popoverPosition.top}px`,
-    left: `${popoverPosition.left}px`
-  };
+  }, [collapsed]);
+  const handleMouseLeave = useCallback(() => {
+    if (collapsed) setHoveredSubmenu(null);
+  }, [collapsed]);
 
   return (
     <>
@@ -420,7 +415,7 @@ export default function Sidebar({ collapsed, setCollapsed, color }: Props) {
         <SidebarNav
           collapsed={collapsed}
           routes={routes}
-          activeRoute={activeRoute}
+          activeRoute={location.pathname}
           expandedRoutes={expandedRoutes}
           menuItemRefs={menuItemRefs}
           handleMouseEnter={handleMouseEnter}
