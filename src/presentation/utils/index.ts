@@ -17,3 +17,23 @@ export const formatted = (date: string | Date) => {
     day: "2-digit"
   });
 };
+
+export const currencyFormatter = (values: number) => {
+
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    minimumFractionDigits: 2,
+    currency: 'USD'
+  })
+  return formatter.format(+values)
+
+}
+
+
+export const cleanCurrencyString = (input: string): number => {
+  const cleaned = input
+    .replace(/,/g, '')       
+    .replace(/[^\d.-]/g, '');  
+
+  return parseFloat(cleaned) || 0;
+};

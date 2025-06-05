@@ -79,7 +79,7 @@ const H3 = ({ children, className = "" }: Props): JSX.Element => {
  */
 const P = ({ children, className = "" }: Props): JSX.Element => {
   return (
-    <p className={`text-sm text-gray-500  ${className}`}>{children}</p>
+    <p className={`text-sm text-gray-500 wrap-anywhere  ${className}`}>{children}</p>
   );
 };
 

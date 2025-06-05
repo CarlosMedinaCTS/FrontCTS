@@ -1,17 +1,13 @@
-import { driver } from "driver.js";
-
-import Tabs from "@/presentation/components/ui/tabs/Tabs";
 import HeaderInfo from "@/presentation/components/data-display/Header-info";
+import Tabs from "@/presentation/components/ui/tabs/Tabs";
+import { driver } from "driver.js";
 import Area from "../../area/views/Area";
 import Puesto from "../../puesto/view/Puesto";
-
-
-
-
+import 'driver.js/dist/driver.css'; 
 const Altas = () => {
     const tabsContent = [
-        { id: 1, label: "Area", content: <Area /> },
-        { id: 2, label: "Puestos", content: <Puesto /> }
+        { id: 1, label: "Puestos", content: <Puesto /> },
+        { id: 2, label: "Area", content: <Area /> }
     ];
 
     const driverObj = driver({

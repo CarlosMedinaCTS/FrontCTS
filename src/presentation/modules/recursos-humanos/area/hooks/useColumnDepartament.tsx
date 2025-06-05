@@ -1,11 +1,11 @@
 import type { Department } from '@/domain/entities/rh';
-import { formatted } from '@/presentation/utils';
 import type { ColumnDef } from '@tanstack/react-table';
 import { useMemo } from 'react'
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import { MenuItem } from '@headlessui/react'
 import { RxDotsVertical } from "react-icons/rx";
 import { MdDelete, MdEdit } from "react-icons/md";
 import type { DepartmentAction } from '../views/Area';
+import Dropdown from '@/presentation/components/data-display/Dropdown';
 
 
 
@@ -14,11 +14,6 @@ interface Props {
 }
 const useColumnDepartament = ({ handleAction }: Props) => {
     return useMemo<ColumnDef<Department>[]>(() => [
-        {
-            accessorKey: "id",
-            header: "ID",
-            cell: info => info.getValue(),
-        },
         {
             accessorKey: "name",
             header: "Nombre del Área",
@@ -30,21 +25,11 @@ const useColumnDepartament = ({ handleAction }: Props) => {
             cell: info => info.getValue(),
         },
         {
-            id: "updated_at",
-            header: "Ultima actualización",
-            cell: info => (
-                <span className="" >
-                    {formatted(info.row.original?.updated_at)
-                    }
-                </span>
-            ),
-        },
-        {
-            id: "status",
-            header: "Estatus",
-            cell: () => (
-                <span className="bg-green-500/10 px-2 rounded-xl text-green-500 text-xs border border-green-200" >
-                    activo
+            id: "positions",
+            header: "Posiciones releacionadas", 
+            cell: (info) => (
+                <span className="bg-blue-500/10 px-2 rounded-xl text-blue-500 text-xs border border-green-200" >
+                    {info.row.original?.positions?.length || 0}
                 </span>
             ),
         },
@@ -52,31 +37,31 @@ const useColumnDepartament = ({ handleAction }: Props) => {
             id: "actions",
             header: "Acciones",
             cell: info => (
-                <div className='flex items-center'>
-                    <Menu>
-                        <MenuButton className="cursor-pointer p-2 hover:bg-gray-100 rounded-full border border-gray-50">
-                            <RxDotsVertical />
-                        </MenuButton>
-                        <MenuItems anchor="bottom" className="bg-white px-4 py-2 flex flex-col gap-1 border border-gray-100 outline-none rounded-lg text-gray-700">
+                <div className='flex items-center justify-center'>
+                    <Dropdown Svg={<RxDotsVertical />} >
+                        <MenuItem>
+                            <button
+                                onClick={() => handleAction({ ...info.row.original, type: 'edit' })}
+                                className="py-1 hover:bg-gray-100 flex items-center gap-4 px-2 rounded-lg text-sm">
+                                <MdEdit />
+                                Editar
+                            </button>
+                        </MenuItem>
+                        <hr className='border-b border-dotted border-gray-200' />
+
+                        {
+                            info.row.original?.positions?.length === 0 &&
                             <MenuItem>
-                                <button 
-                                    onClick={()=> handleAction({ ...info.row.original, type: 'edit' }) }
-                                    className="py-1 hover:bg-gray-100 flex items-center gap-4 px-2 rounded-lg">
-                                    <MdEdit />
-                                    Editar
-                                </button>
-                            </MenuItem>
-                            <hr className='border-b border-dotted border-gray-200' />
-                            <MenuItem>
-                                <button 
-                                    onClick={()=> handleAction({ ...info.row.original, type: 'delete' }) }
-                                    className="py-1 hover:bg-gray-100 flex items-center gap-4 px-2 rounded-lg text-red-400">
+                                <button
+                                    onClick={() => handleAction({ ...info.row.original, type: 'delete' })}
+                                    className="py-1 hover:bg-gray-100 flex items-center gap-4 px-2 rounded-lg text-red-400 text-sm">
                                     <MdDelete />
                                     Eliminar
                                 </button>
                             </MenuItem>
-                        </MenuItems>
-                    </Menu>
+                        }
+                    </Dropdown>
+
                 </div>
             ),
         },

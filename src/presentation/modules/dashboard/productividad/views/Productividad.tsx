@@ -2,9 +2,10 @@ import { IoMdArrowDown } from "react-icons/io"
 import { LuUsers } from "react-icons/lu"
 import { Typography } from "../../../../components/ui/typography/Typography"
 import ApexChart from "react-apexcharts";
+import type { ApexOptions } from "apexcharts";
 
 const Productividad = () => {
-    const options = {
+    const options : ApexOptions  = {
         chart: {
             sparkline: { enabled: false },
             height: "100%",
@@ -15,7 +16,6 @@ const Productividad = () => {
             toolbar: { show: false },
         },
         xaxis: {
-            show: true,
             categories: [
                 '01 Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb',
                 '08 Feb', '09 Feb', '10 Feb', '11 Feb', '12 Feb', '13 Feb', '14 Feb',
@@ -75,7 +75,7 @@ const Productividad = () => {
     ];
 
 
-    const options2 = {
+    const options2 : ApexOptions = {
         chart: {
             sparkline: { enabled: false },
             height: "100%",
@@ -86,7 +86,6 @@ const Productividad = () => {
             toolbar: { show: false },
         },
         xaxis: {
-            show: true,
             categories: ['01 Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb'],
             labels: {
                 show: true,
@@ -141,7 +140,7 @@ const Productividad = () => {
         },
     ];
 
-    const barOptions = {
+    const barOptions : ApexOptions = {
         chart: {
             type: "bar",
             height: 300,
@@ -194,25 +193,11 @@ const Productividad = () => {
                 formatter: (title: string) => title.slice(0, 3),
             },
         },
-        yaxis: {
-            labels: {
-                align: "left",
-                minWidth: 0,
-                maxWidth: 140,
-                style: {
-                    colors: "#9ca3af",
-                    fontSize: "13px",
-                    fontFamily: "Inter, ui-sans-serif",
-                    fontWeight: 400,
-                },
-                formatter: (value: number) => (value >= 1000 ? `${value / 1000}k` : value),
-            },
-        },
         states: {
             hover: {
                 filter: {
                     type: "darken",
-                    value: 0.9,
+                   
                 },
             },
         },

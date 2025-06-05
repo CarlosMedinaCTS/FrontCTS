@@ -1,13 +1,14 @@
-import { Typography } from "../../../../components/ui/typography/Typography"
-import Button from "@/presentation/components/ui/buttons/Button"
-import { useRef, type FormEvent } from "react"
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
-import { rhServices, type RequestDepartament } from "@/infrastructure/services/rh";
-import useValidation from "@/presentation/hooks/shared/useValidation";
-import Spinner from "@/presentation/components/ui/loaders/Spinner";
-import { BiErrorCircle } from "react-icons/bi";
+import type { Department, RequestDepartament, ResponseData, UpdatePayload } from "@/domain/entities/rh";
+import { rhServices } from "@/infrastructure/services/rh";
 import FormField from "@/presentation/components/data-display/FormField";
+import Button from "@/presentation/components/ui/buttons/Button";
+import Spinner from "@/presentation/components/ui/loaders/Spinner";
+import useValidation from "@/presentation/hooks/shared/useValidation";
+import { useMutation } from "@tanstack/react-query";
+import { useRef, type FormEvent } from "react";
+import { BiErrorCircle } from "react-icons/bi";
+import { toast } from "react-toastify";
+import { Typography } from "../../../../components/ui/typography/Typography";
 import type { DepartmentAction } from "../views/Area";
 
 const apiRh = new rhServices();
@@ -20,25 +21,26 @@ interface Props {
 const FormuserComponent = ({ fn, values }: Props) => {
     const name = useRef<HTMLInputElement>(null);
     const abreviation = useRef<HTMLInputElement>(null);
-    const { valid, handleBlur } = useValidation(
+    const { valid, handleBlur, config } = useValidation(
         { name: "", abreviation: "" },
-        { name: { min: 3, max : 70 }, abreviation: { min: 2, max: 9 } }
+        { name: { min: 3, max: 70 }, abreviation: { min: 2, max: 9 } }
     );
 
     const mutation = useMutation({
         mutationFn: (data: RequestDepartament) => {
             if (values.type === 'edit') {
-                return apiRh.pathDepartament(data, values.id);
+                return apiRh.pathDepartament<ResponseData<UpdatePayload>>(data, values.id);
             }
-            return apiRh.postDepartament(data);
+            return apiRh.postDepartament<ResponseData<Department>>(data);
         },
-        onSuccess: (data) => {
-            console.log(data)
+        onSuccess: (data: ResponseData<Department | UpdatePayload>) => {
             if (data.error) {
                 toast.error(`${data.error}`);
-            } else {
-                toast.success(`Dato almacenado con exito`)
             }
+            if ('affected' in data.data) {
+                toast.warning(`Dato modificado ${data.data.affected}`);
+            }
+            toast.success(`Dato guardado con exito`);
             fn();
             if (name.current) name.current.value = "";
             if (abreviation.current) abreviation.current.value = "";
@@ -75,13 +77,16 @@ const FormuserComponent = ({ fn, values }: Props) => {
             </Typography.P>
             <hr className="border border-gray-100 my-4" />
 
+
+           
+
             {
                 mutation.data?.error &&
                 <div className=" bg-red-50 py-2 flex gap-2 rounded-2xl my-5 px-1 items-center border border-red-100">
                     <BiErrorCircle className="text-red-400 text-3xl text-center bg-red-100 p-1 rounded-full border border-red-200" />
                     <Typography.H3 className="font-normal flex flex-col gap-1 text-sm">
                         Algo no está bien
-                        <Typography.P className="text-xs">{mutation.data?.error}</Typography.P>
+                        <Typography.P className="text-xs">{mutation.data.error as string}</Typography.P>
                         <Typography.P className="text-xs">{JSON.stringify(mutation.data)}</Typography.P>
                     </Typography.H3>
                 </div>
@@ -96,7 +101,8 @@ const FormuserComponent = ({ fn, values }: Props) => {
                         label: "Nombre",
                         placeholder: "Nombre del departamento",
                         defaultValue: values.name,
-                        min: 3,
+                        min: config.name.min,
+                        max: config.name.max,
                     }}
                     refInput={name}
                     error={valid.name}
@@ -109,8 +115,8 @@ const FormuserComponent = ({ fn, values }: Props) => {
                         label: "Abreviación",
                         placeholder: "Nombre del abreviacion",
                         defaultValue: values.abreviation,
-                        min: 3,
-                        max: 9,
+                        min: config.abreviation.min,
+                        max: config.abreviation.max,
                     }}
                     refInput={abreviation}
                     error={valid.abreviation}

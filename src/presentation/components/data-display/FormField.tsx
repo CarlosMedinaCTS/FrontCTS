@@ -6,15 +6,15 @@ interface FieldConfig<T> {
   name: keyof T & string;
   label: string;
   placeholder?: string;
-  type?: string;
+  type? : string;
   defaultValue?: string;
-  min?: number;
+  min? : number;
   max?: number;
 }
 
 interface FormFieldProps<T extends Record<string, unknown>> {
   field: FieldConfig<T>;
-  refInput: RefObject<HTMLInputElement | null>;
+  refInput?: RefObject<HTMLInputElement | null>;
   error?: string;
   handleBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
@@ -35,8 +35,8 @@ const FormField = <T extends Record<string, unknown>>({
       defaultValue={field.defaultValue}
       placeholder={field.placeholder}
       type={field.type || "text"}
-      min={field.min}
-      max={field.max}
+      minLength={field.min}
+      maxLength={field.max}
       className="placeholder:text-xs"
       onBlur={handleBlur}
     />

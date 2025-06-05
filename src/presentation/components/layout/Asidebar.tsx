@@ -60,7 +60,7 @@ const routes: Route[] = [
     subRoutes: [{ name: "Alta Areas", path: "/recursos/alta-area" }],
   },
   {
-    name: "Saga",
+    name: "Administración de gestion de activos",
     path: "/saga",
     icon: <LuLaptop className="w-6 h-6 stroke-[1.5] text-inherit" />,
     isExpandable: true,

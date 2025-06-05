@@ -16,7 +16,7 @@ const Alert = ({closeModal, handleAction, values} : Props) => {
             {/* Título */}
             <Typography.H2 className="text-center font-normal text-lg">¿Confirmar eliminación?</Typography.H2>
             {/* Mensaje de advertencia */}
-            <div className="text-center mb-6">
+            <div className="text-center mb-6 wrap-anywhere">
                 <Typography.P className="mb-3">Estás a punto de eliminar:</Typography.P>
                 <p className="font-medium text-gray-900 bg-gray-50 px-3 py-2 rounded-md">{values}</p>
                 <p className="text-sm text-red-600 mt-3">

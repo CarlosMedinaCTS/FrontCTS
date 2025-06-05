@@ -1,19 +1,26 @@
-import { IoSaveOutline } from "react-icons/io5";
-import Popover from "../../../../components/data-display/Popover";
-import useToggle from "../../../../hooks/ui/useToggle";
-import FormPuesto from "../components/FormPuesto";
-import Button from "../../../../components/ui/buttons/Button";
-import type { CollatedDepartment, Position } from "@/domain/entities/rh";
-import useApiQuery from "@/presentation/hooks/shared/useQuery";
+import type { Position, Response, ResponseData, UpdatePayload } from "@/domain/entities/rh";
 import { rhServices } from "@/infrastructure/services/rh";
-import useColumnPosition from "../hooks/useColumnPosition";
-import TableStack from "@/presentation/components/data-display/TableStack";
-import CircleLoader from "@/presentation/components/ui/loaders/CircleLoader";
-import { useState } from "react";
 import Alert from "@/presentation/components/data-display/Alert";
 import Modal from "@/presentation/components/data-display/Modal";
+import TableStack from "@/presentation/components/data-display/TableStack";
+import CircleLoader from "@/presentation/components/ui/loaders/CircleLoader";
+import useApiQuery from "@/presentation/hooks/shared/useQuery";
+import useToggle from "@/presentation/hooks/ui/useToggle";
 import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
+import { IoSaveOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
+import FormPuesto from "../components/FormPuesto";
+import useColumnPosition from "../hooks/useColumnPosition";
+import Button from "@/presentation/components/ui/buttons/Button";
+import Popover from "@/presentation/components/data-display/Popover";
+import { RiRefreshLine } from "react-icons/ri";
+import { VscSettings } from "react-icons/vsc";
+import Dropdown from "@/presentation/components/data-display/Dropdown";
+import Switch from "@/presentation/components/ui/inputs/Switch";
+import { CiExport } from "react-icons/ci";
+import useExcel from "@/presentation/hooks/shared/useExcel";
+
 
 const apiRh = new rhServices();
 export interface DepartmentAction extends Position {
@@ -23,10 +30,12 @@ export interface DepartmentAction extends Position {
 const Puesto = () => {
     const [valuesEdit, setValuesEdit] = useState({} as DepartmentAction)
     const { isToggled, handleToggle, handleManual } = useToggle();
-    const { data, isLoading, isFetching, refetch } = useApiQuery<CollatedDepartment<Position>>(['position'], () => apiRh.getPosition());
+    const { data, isLoading, isFetching, refetch } = useApiQuery<Response<Position[]>>(['position'], () => apiRh.getPosition<Response<Position[]>>());
+    const [isBoolSalary, setIsBoolSalary] = useState(false);
+    const [isBoolFilter, setIsBoolFilter] = useState(false);
 
     const mutation = useMutation({
-        mutationFn: (id: number) => apiRh.deletePosition(id),
+        mutationFn: (id: number) => apiRh.deletePosition<ResponseData<UpdatePayload>>(id),
         onSuccess: (data) => {
             console.log(data)
             if (data.error) {
@@ -40,13 +49,12 @@ const Puesto = () => {
         onError: (error) => { console.log(error) }
     });
 
-
     const handleAction = (item: DepartmentAction) => {
         handleManual(true);
         setValuesEdit(item);
     };
 
-    const columns = useColumnPosition({ handleAction })
+    const columns = useColumnPosition({ handleAction, showSalary: isBoolSalary, fn: () => setIsBoolSalary(!isBoolSalary) });
 
     const allReset = () => {
         setValuesEdit({} as DepartmentAction);
@@ -58,6 +66,23 @@ const Puesto = () => {
         setValuesEdit({} as DepartmentAction);
     }
 
+    const { downloadExcel } = useExcel()
+
+
+    const mapper = (data: Position) => {
+        return {
+            nombre: data.name,
+            salario: data.salary.amount,
+            departamento: data.department.name,
+            abreviacion: data.department.abreviation,
+            fecha_Creacion: data.created_at,
+            fecha_Actualizacion: data.updated_at,
+            salario_texto: data.salary.salary_in_words
+        }
+    }
+
+
+
     return (
         <div>
 
@@ -67,13 +92,44 @@ const Puesto = () => {
                         onClick={handleToggle}
                     >
                         <IoSaveOutline className="text-lg" />
-                        <span>Alta de Area</span>
+                        <span>Alta de Puestos</span>
                     </Button>
+
+                    <div className="flex gap-2">
+                        <button
+                            className="border border-gray-200 p-1 rounded-xl bg-gray-100 group cursor-pointer"
+                            disabled={isLoading || isFetching}
+                            onClick={() => refetch()}
+                        >
+                            <RiRefreshLine className="text-xl text-gray-700 transition-all group-hover:animate-spin" />
+                        </button>
+
+                        
+
+                        <Dropdown
+                            cn="border border-gray-200 rounded-xl bg-gray-100 group cursor-pointe"
+                            Svg={<VscSettings className=" text-gray-700" />}
+                        >
+                            <button
+                                className="flex text-sm justify-between transition-all items-center gap-2 hover:bg-gray-100 p-2 rounded"
+                                onClick={() => downloadExcel(data?.data.map(mapper) || [])}
+                            >
+                                Exportar
+                                <CiExport className="text-lg" />
+                            </button>
+                            <hr className="border-b border-gray-100 my-2" />
+                            <button className="flex text-sm justify-between transition-all items-center gap-2 hover:bg-gray-100 p-2 rounded">
+                                Filtros
+                                <Switch checked={isBoolFilter} onChange={() => setIsBoolFilter(!isBoolFilter)} />
+                            </button>
+                        </Dropdown>
+                    </div>
                 </div>
 
                 <TableStack
                     data={data?.data || []}
                     columns={columns}
+                    isFilters={isBoolFilter}
                 />
 
             </div>

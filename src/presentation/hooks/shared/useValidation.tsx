@@ -38,6 +38,7 @@ const useValidation = <T extends Record<string, unknown>>(
         valid,
         handleBlur,
         setIsValid,
+        config
     };
 };
 
