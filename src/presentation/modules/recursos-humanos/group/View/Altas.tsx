@@ -6,7 +6,7 @@ import Puesto from "../../puesto/view/Puesto";
 import 'driver.js/dist/driver.css'; 
 const Altas = () => {
     const tabsContent = [
-        { id: 1, label: "Puestos", content: <Puesto /> },
+        { id: 1, label: "Direcciones", content: <Puesto /> },
         { id: 2, label: "Area", content: <Area /> }
     ];
 

@@ -15,7 +15,7 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, children, title, paragraph
 
     return (
         <main className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xs bg-black/40">
-            <section className="bg-white rounded-3xl shadow-lg p-8 w-[40rem] relative">
+            <section className="bg-white rounded-3xl shadow-lg p-8 w-[40rem]">
                 <div>
                     <div className="flex justify-between items-center">
                         <Typography.H2>{title}</Typography.H2>

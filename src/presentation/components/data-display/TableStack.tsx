@@ -12,19 +12,22 @@ import { useState } from "react";
 import { RiArrowDropLeftLine, RiArrowDropRightLine, RiArrowRightDoubleLine } from 'react-icons/ri';
 import Input from '../ui/inputs/Input';
 import { TiArrowUnsorted } from "react-icons/ti";
+import { SlDoc } from "react-icons/sl";
+import { Typography } from '../ui/typography/Typography';
+
 
 interface Props<T> {
     data: T[];
     columns: ColumnDef<T>[];
-    isFilters: boolean
+    isFilters: boolean;
+    emptyMessage?: string; 
 }
 
-function TableStack<T>({ data, columns, isFilters = false }: Props<T>) {
+function TableStack<T>({ data, columns, isFilters = false, emptyMessage = "No hay datos disponibles" }: Props<T>) {
     const [pagination, setPagination] = useState({
         pageIndex: 0,
         pageSize: 10,
     });
-    // @ ts-ignore
     const [columnFilters, setColumnFilters] = useState<{
         id: string;
         value: unknown;
@@ -58,11 +61,8 @@ function TableStack<T>({ data, columns, isFilters = false }: Props<T>) {
                         <tr key={headerGroup.id} className='border border-gray-100'>
                             {headerGroup.headers.map(header => {
                                 return (
-                                    <th key={header.id} className="px-6 py-2 text-center cursor-pointer select-none"
-
-                                    >
-                                        <div
-                                            className='text-sm font-medium flex items-center justify-center gap-1'>
+                                    <th key={header.id} className="px-6 py-2 text-center cursor-pointer select-none">
+                                        <div className='text-sm font-medium flex items-center justify-center gap-1'>
                                             <div>
                                                 {flexRender(header.column.columnDef.header, header.getContext())}
                                             </div>
@@ -72,7 +72,6 @@ function TableStack<T>({ data, columns, isFilters = false }: Props<T>) {
                                             >
                                                 <TiArrowUnsorted className='text-gray-300' />
                                             </div>
-
                                         </div>
                                         {isFilters && header.column.getCanFilter() && (
                                             <div className="mt-1">
@@ -91,91 +90,109 @@ function TableStack<T>({ data, columns, isFilters = false }: Props<T>) {
                     ))}
                 </thead>
                 <tbody>
-                    {table.getRowModel().rows.map(row => (
-                        <tr key={row.id} className='border border-gray-100 text-center'>
-                            {row.getVisibleCells().map(cell => (
-                                <td key={cell.id} className="px-6 py-2 text-xs">
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                </td>
-                            ))}
+                    {table.getRowModel().rows.length === 0 ? (
+                        <tr>
+                            <td
+                                colSpan={columns.length}
+                                className="px-6 py-12 text-center text-gray-500"
+                            >
+                                <div className="flex flex-col items-center justify-center space-y-2">
+                                    <div className="text-gray-400">
+                                        <SlDoc className='text-4xl' />
+                                    </div>
+                                    <Typography.H3>{emptyMessage}</Typography.H3>
+                                </div>
+                            </td>
                         </tr>
-                    ))}
+                    ) : (
+                        table.getRowModel().rows.map(row => (
+                            <tr key={row.id} className='border border-gray-100 text-center'>
+                                {row.getVisibleCells().map(cell => (
+                                    <td key={cell.id} className="px-6 py-2 text-xs">
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))
+                    )}
                 </tbody>
             </table>
 
-            {/* PAGINACIÓN */}
-            <section className='flex flex-col md:flex-row justify-between mt-5 gap-4'>
-                <span className="flex items-center gap-1 text-xs text-gray-500">
-                    <div>Página</div>
-                    <span>
-                        {pagination.pageIndex + 1} de {table.getPageCount()}
+            {/* PAGINACIÓN - Solo mostrar si hay datos */}
+            {table.getRowModel().rows.length > 0 && (
+                <section className='flex flex-col md:flex-row justify-between mt-5 gap-4'>
+                    <span className="flex items-center gap-1 text-xs text-gray-500">
+                        <div>Página</div>
+                        <span>
+                            {pagination.pageIndex + 1} de {table.getPageCount()}
+                        </span>
                     </span>
-                </span>
 
-                <div className="flex flex-col md:flex-row md:items-center gap-2">
-                    <div className='flex gap-2'>
-                        <button
-                            className='bg-gray-100 border border-gray-200 rounded-lg p-1'
-                            onClick={() => table.setPageIndex(0)}
-                            disabled={!table.getCanPreviousPage()}
-                        >
-                            <RiArrowRightDoubleLine className='text-gray-700 rotate-180' />
-                        </button>
-                        <button
-                            onClick={() => table.previousPage()}
-                            disabled={!table.getCanPreviousPage()}
-                            className='bg-gray-100 border border-gray-200 rounded-lg p-0.5'
-                        >
-                            <RiArrowDropLeftLine className='text-gray-700 text-xl' />
-                        </button>
-                        <button
-                            onClick={() => table.nextPage()}
-                            disabled={!table.getCanNextPage()}
-                            className='bg-gray-100 border border-gray-200 rounded-lg p-0.5'
-                        >
-                            <RiArrowDropRightLine className='text-gray-700 text-xl' />
-                        </button>
-                        <button
-                            className='bg-gray-100 border border-gray-200 rounded-lg p-1 flex'
-                            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                            disabled={!table.getCanNextPage()}
-                        >
-                            <RiArrowRightDoubleLine className='text-gray-700' />
-                        </button>
-                    </div>
+                    <div className="flex flex-col md:flex-row md:items-center gap-2">
+                        <div className='flex gap-2'>
+                            <button
+                                className='bg-gray-100 border border-gray-200 rounded-lg p-1'
+                                onClick={() => table.setPageIndex(0)}
+                                disabled={!table.getCanPreviousPage()}
+                            >
+                                <RiArrowRightDoubleLine className='text-gray-700 rotate-180' />
+                            </button>
+                            <button
+                                onClick={() => table.previousPage()}
+                                disabled={!table.getCanPreviousPage()}
+                                className='bg-gray-100 border border-gray-200 rounded-lg p-0.5'
+                            >
+                                <RiArrowDropLeftLine className='text-gray-700 text-xl' />
+                            </button>
+                            <button
+                                onClick={() => table.nextPage()}
+                                disabled={!table.getCanNextPage()}
+                                className='bg-gray-100 border border-gray-200 rounded-lg p-0.5'
+                            >
+                                <RiArrowDropRightLine className='text-gray-700 text-xl' />
+                            </button>
+                            <button
+                                className='bg-gray-100 border border-gray-200 rounded-lg p-1 flex'
+                                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                                disabled={!table.getCanNextPage()}
+                            >
+                                <RiArrowRightDoubleLine className='text-gray-700' />
+                            </button>
+                        </div>
 
-                    <span className="flex items-center gap-1 text-sm text-gray-600">
-                        Ir a la página
-                        <Input
-                            type="number"
-                            min={1}
-                            max={table.getPageCount()}
-                            value={pagination.pageIndex + 1}
+                        <span className="flex items-center gap-1 text-sm text-gray-600">
+                            Ir a la página
+                            <Input
+                                type="number"
+                                min={1}
+                                max={table.getPageCount()}
+                                value={pagination.pageIndex + 1}
+                                onChange={e => {
+                                    let page = Number(e.target.value) - 1;
+                                    if (isNaN(page)) page = 0;
+                                    if (page < 0) page = 0;
+                                    if (page >= table.getPageCount()) page = table.getPageCount() - 1;
+                                    table.setPageIndex(page);
+                                }}
+                                className="border p-1 rounded !w-20"
+                            />
+                        </span>
+                        <select
+                            className='text-gray-600 text-sm'
+                            value={pagination.pageSize}
                             onChange={e => {
-                                let page = Number(e.target.value) - 1;
-                                if (isNaN(page)) page = 0;
-                                if (page < 0) page = 0;
-                                if (page >= table.getPageCount()) page = table.getPageCount() - 1;
-                                table.setPageIndex(page);
+                                table.setPageSize(Number(e.target.value));
                             }}
-                            className="border p-1 rounded !w-20"
-                        />
-                    </span>
-                    <select
-                        className='text-gray-600 text-sm'
-                        value={pagination.pageSize}
-                        onChange={e => {
-                            table.setPageSize(Number(e.target.value));
-                        }}
-                    >
-                        {[10, 20, 30, 40, 50].map(pageSize => (
-                            <option key={pageSize} value={pageSize}>
-                                Mostrar {pageSize}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            </section>
+                        >
+                            {[10, 20, 30, 40, 50].map(pageSize => (
+                                <option key={pageSize} value={pageSize}>
+                                    Mostrar {pageSize}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </section>
+            )}
         </div>
     );
 }

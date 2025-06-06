@@ -38,7 +38,7 @@ const useColumnPosition = ({ handleAction, showSalary, fn }: Props) => {
         },
         {
             accessorKey: "name",
-            header: "Puesto",
+            header: "Dirección",
             cell: info => info.getValue(),
         },
         {
@@ -67,6 +67,7 @@ const useColumnPosition = ({ handleAction, showSalary, fn }: Props) => {
                     }
                 </span>
             ),
+            enableSorting: false,
         },
         {
             accessorKey: "salary.salary_in_words",

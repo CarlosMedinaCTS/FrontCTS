@@ -3,17 +3,11 @@ import useAutocomplete, { type UseAutocompleteProps } from '@mui/material/useAut
 import Input from './Input';
 import { Typography } from '../typography/Typography';
 import Spinner from '../loaders/Spinner';
+import { styled } from '@mui/system';
+
 
 // Puedes eliminar el styled si prefieres usar solo Tailwind
-const Listbox = (props: React.HTMLAttributes<HTMLUListElement>) => (
-  <ul
-    {...props}
-    className={
-      "border border-gray-200 rounded-lg mt-1 bg-white shadow-lg max-h-48 overflow-auto z-10 " +
-      (props.className || "")
-    }
-  />
-);
+
 
 interface AutocompleteInputProps<T> extends Omit<Partial<UseAutocompleteProps<T, false, false, false>>, 'onChange' | 'value'> {
   label?: string;
@@ -51,6 +45,31 @@ function AutocompleteInput<T>({
     ...rest,
   });
 
+  const Listbox = styled('ul')(({ theme }) => ({
+    margin: 0,
+    padding: 0,
+    zIndex: 1,
+    position: 'absolute',
+    listStyle: 'none',
+    backgroundColor: '#fff',
+    overflow: 'auto',
+    maxHeight: 200,
+    border: '1px solid rgba(0,0,0,.25)',
+    '& li.Mui-focused': {
+      backgroundColor: '#eef2ff',
+      color: 'white',
+      cursor: 'pointer',
+    },
+    '& li:active': {
+      backgroundColor: '#2977f5',
+      color: 'white',
+    },
+    ...theme.applyStyles('dark', {
+      backgroundColor: '#000',
+    }),
+  }));
+
+
   return (
     <div className="relative mb-5">
       <div {...getRootProps()} className="flex flex-col gap-1 w-full">
@@ -76,7 +95,7 @@ function AutocompleteInput<T>({
                 {...optionProps}
                 className="px-4 py-2 cursor-pointer hover:bg-blue-100 transition text-sm"
               >
-                <Typography.P>
+                <Typography.P className='text-gray-700'>
                   {renderOption ? renderOption(option) : getOptionLabel(option)}
                 </Typography.P>
               </li>

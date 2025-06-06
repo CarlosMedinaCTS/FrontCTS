@@ -39,8 +39,9 @@ const FormuserComponent = ({ fn, values }: Props) => {
             }
             if ('affected' in data.data) {
                 toast.warning(`Dato modificado ${data.data.affected}`);
+            }else{
+                toast.success(`Dato guardado con exito`);
             }
-            toast.success(`Dato guardado con exito`);
             fn();
             if (name.current) name.current.value = "";
             if (abreviation.current) abreviation.current.value = "";
@@ -52,18 +53,14 @@ const FormuserComponent = ({ fn, values }: Props) => {
         e.preventDefault();
         const nameValue = name.current?.value.trim() || '';
         const abreviationValue = abreviation.current?.value.trim() || '';
-
-
         if (!nameValue || !abreviationValue) {
             toast.error("Favor de llenar los campos correspondientes");
             return;
-        }
-
-
+        };
         if (Object.values(valid).some((v) => v !== "")) {
             toast.error("Favor de llenar los campos correspondientes");
             return;
-        }
+        };
         mutation.mutate({
             name: nameValue,
             abreviation: abreviationValue

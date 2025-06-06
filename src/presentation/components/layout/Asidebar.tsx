@@ -4,7 +4,7 @@ import {
   LuBox,
   LuLaptop
 } from "react-icons/lu";
-import logo from "./../../assets/logo-white.svg";
+import logo from "@/presentation/assets/logos/logo-white.svg";
 import { NavLink } from "react-router";
 import { TbLayoutDashboard } from "react-icons/tb";
 import { FaRegUser } from "react-icons/fa";

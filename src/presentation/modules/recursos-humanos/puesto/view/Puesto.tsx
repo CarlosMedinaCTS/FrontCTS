@@ -1,25 +1,25 @@
 import type { Position, Response, ResponseData, UpdatePayload } from "@/domain/entities/rh";
 import { rhServices } from "@/infrastructure/services/rh";
 import Alert from "@/presentation/components/data-display/Alert";
+import Dropdown from "@/presentation/components/data-display/Dropdown";
 import Modal from "@/presentation/components/data-display/Modal";
+import Popover from "@/presentation/components/data-display/Popover";
 import TableStack from "@/presentation/components/data-display/TableStack";
+import Button from "@/presentation/components/ui/buttons/Button";
+import Switch from "@/presentation/components/ui/inputs/Switch";
 import CircleLoader from "@/presentation/components/ui/loaders/CircleLoader";
+import useExcel from "@/presentation/hooks/shared/useExcel";
 import useApiQuery from "@/presentation/hooks/shared/useQuery";
 import useToggle from "@/presentation/hooks/ui/useToggle";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { CiExport } from "react-icons/ci";
 import { IoSaveOutline } from "react-icons/io5";
+import { RiRefreshLine } from "react-icons/ri";
+import { VscSettings } from "react-icons/vsc";
 import { toast } from "react-toastify";
 import FormPuesto from "../components/FormPuesto";
 import useColumnPosition from "../hooks/useColumnPosition";
-import Button from "@/presentation/components/ui/buttons/Button";
-import Popover from "@/presentation/components/data-display/Popover";
-import { RiRefreshLine } from "react-icons/ri";
-import { VscSettings } from "react-icons/vsc";
-import Dropdown from "@/presentation/components/data-display/Dropdown";
-import Switch from "@/presentation/components/ui/inputs/Switch";
-import { CiExport } from "react-icons/ci";
-import useExcel from "@/presentation/hooks/shared/useExcel";
 
 
 const apiRh = new rhServices();
@@ -59,6 +59,7 @@ const Puesto = () => {
     const allReset = () => {
         setValuesEdit({} as DepartmentAction);
         refetch();
+        handleManual(false);
     }
 
     const onClose = () => {
@@ -92,7 +93,7 @@ const Puesto = () => {
                         onClick={handleToggle}
                     >
                         <IoSaveOutline className="text-lg" />
-                        <span>Alta de Puestos</span>
+                        <span>Alta de Direcciones</span>
                     </Button>
 
                     <div className="flex gap-2">
@@ -104,7 +105,7 @@ const Puesto = () => {
                             <RiRefreshLine className="text-xl text-gray-700 transition-all group-hover:animate-spin" />
                         </button>
 
-                        
+
 
                         <Dropdown
                             cn="border border-gray-200 rounded-xl bg-gray-100 group cursor-pointe"
@@ -137,7 +138,7 @@ const Puesto = () => {
 
 
             {isToggled && valuesEdit.type !== 'delete' && (
-                <Popover title="Alta de Área" onClose={onClose}>
+                <Popover title="Alta de direcciones" onClose={onClose}>
                     <FormPuesto
                         fn={allReset}
                         values={valuesEdit}

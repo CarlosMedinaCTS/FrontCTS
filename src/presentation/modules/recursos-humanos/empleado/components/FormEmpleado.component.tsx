@@ -1,5 +1,5 @@
-import Input from "../../../../components/ui/inputs/Input"
-import { Typography } from "../../../../components/ui/typography/Typography"
+import  { Typography } from "@/presentation/components/ui/typography/Typography"
+import { Input } from "@headlessui/react"
 
 
 const FormEmpleadoComponent = () => {

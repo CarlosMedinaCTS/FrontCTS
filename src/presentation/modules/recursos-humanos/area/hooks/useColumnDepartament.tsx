@@ -26,7 +26,7 @@ const useColumnDepartament = ({ handleAction }: Props) => {
         },
         {
             id: "positions",
-            header: "Posiciones releacionadas", 
+            header: "Direcciones releacionadas", 
             cell: (info) => (
                 <span className="bg-blue-500/10 px-2 rounded-xl text-blue-500 text-xs border border-green-200" >
                     {info.row.original?.positions?.length || 0}

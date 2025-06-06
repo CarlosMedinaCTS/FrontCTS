@@ -37,7 +37,6 @@ const Area = () => {
   const mutation = useMutation({
     mutationFn: (id: number) => apiRh.deleteDepartament<ResponseData<UpdatePayload>>(id),
     onSuccess: (data) => {
-      console.log(data)
       if (data.error) {
         toast.error(`${data.error}`);
       } else {
@@ -57,20 +56,17 @@ const Area = () => {
   const allReset = () => {
     setValuesEdit({} as DepartmentAction);
     refetch();
+    handleManual(false);
   };
 
   const onClose = () => {
-    handleManual(false);
     setValuesEdit({} as DepartmentAction);
+    handleManual(false);
   };
 
   const columns = useColumnDepartament({ handleAction });
 
-  const { downloadExcel } = useExcel()
-
-
-
-
+  const { downloadExcel } = useExcel();
 
   const mapperExcel = (data: Department) => {
     return {
@@ -80,7 +76,8 @@ const Area = () => {
       abreviacion: data.abreviation,
       numero_De_Puestos_Relacionados: data.positions?.length
     }
-  }
+  };
+
   return (
     <section className="bg-white relative">
       <div className="relative overflow-x-auto">

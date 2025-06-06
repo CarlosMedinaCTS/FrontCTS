@@ -1,7 +1,8 @@
-import { Typography } from "../../../../components/ui/typography/Typography";
+
+import { Typography } from "@/presentation/components/ui/typography/Typography";
 import FormLogin from "../components/Form-Login";
 import ImageLogin from "../components/Image-Login";
-import logo from "./../../../../assets/logo.png";
+import logo from "@/presentation/assets/logos/logo.png"
 
 const Login = () => {
   return (

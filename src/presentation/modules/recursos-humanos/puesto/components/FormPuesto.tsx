@@ -13,7 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { toast } from "react-toastify";
 import type { DepartmentAction } from "../view/Puesto";
-import toWords from "@/presentation/utils/numberToWords";
+import { toWords } from "@/presentation/utils/numberToWords";
 
 
 const apiRh = new rhServices();
@@ -23,7 +23,6 @@ interface Props {
     values: DepartmentAction
 }
 
-const convertir = toWords({ unidad: 'MXN', mayus: true });
 
 const FormPuesto = ({ fn, values }: Props) => {
     const [selected, setSelected] = useState<Department | null>(null);
@@ -36,11 +35,10 @@ const FormPuesto = ({ fn, values }: Props) => {
     );
 
     const mutation = useMutation({
-
         mutationFn: (data: RequestPosition) => {
             if (values.type === 'edit') {
                 return apiRh.pathPosition<ResponseData<UpdatePayload>>(data, values.id);
-            }
+            };
             return apiRh.postPosition<ResponseData<Position>>(data);
         },
         onSuccess: (data: ResponseData<Position | UpdatePayload>) => {
@@ -63,18 +61,16 @@ const FormPuesto = ({ fn, values }: Props) => {
         if (!nameValue || !value  || !selected?.id) {
             toast.error("Favor de llenar los campos correspondientes");
             return;
-        }
-
-
+        };
         if (Object.values(valid).some((v) => v !== "")) {
             toast.error("Favor de llenar los campos correspondientes");
             return;
-        }
+        };
         mutation.mutate({
             name: nameValue,
             salary: {
                 amount: value,
-                salary_in_words: convertir(value)
+                salary_in_words: toWords(value)
             },
             department_id: selected.id
         });
@@ -88,8 +84,6 @@ const FormPuesto = ({ fn, values }: Props) => {
             if (found) setSelected(found);
         }
     }, [values?.department?.id, data?.data]);
-
-
 
 
     return (
@@ -127,14 +121,16 @@ const FormPuesto = ({ fn, values }: Props) => {
                 </div>
 
 
-                <AutocompleteInput
-                    label="Departamentos"
-                    options={data?.data || []}
-                    getOptionLabel={(option) => option.name}
-                    value={selected}
-                    onChange={setSelected}
-                    isLoading={isLoading}
-                />
+                <div className="mt-5">
+                    <AutocompleteInput
+                        label="Departamentos"
+                        options={data?.data || []}
+                        getOptionLabel={(option) => option.name}
+                        value={selected}
+                        onChange={setSelected}
+                        isLoading={isLoading}
+                    /> 
+                </div>
 
 
 

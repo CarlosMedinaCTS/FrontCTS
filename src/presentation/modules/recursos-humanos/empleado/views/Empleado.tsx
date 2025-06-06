@@ -1,14 +1,49 @@
-import { IoSaveOutline } from "react-icons/io5"
-import Table from "../../../../components/data-display/Table"
-import Button from "../../../../components/ui/buttons/Button"
-import useToggle from "../../../../hooks/ui/useToggle";
-import HeaderInfo from "../../../../components/data-display/Header-info";
+import pdf from "@/presentation/assets/icons/pdf.png";
+import TableStack from "@/presentation/components/data-display/TableStack";
+import { Typography } from "@/presentation/components/ui/typography/Typography";
+import { Button } from "@headlessui/react";
 import { driver } from "driver.js";
+import { useState } from "react";
+import { IoSaveOutline } from "react-icons/io5";
+import { RxDotsVertical } from "react-icons/rx";
 import FormEmpleadoComponent from "../components/FormEmpleado.component";
-import Modal from "../../../../components/data-display/Modal";
-
+import useColumnEmployees from "../hooks/useColumnEmployees";
+import HeaderInfo from "@/presentation/components/data-display/Header-info";
+import Modal from "@/presentation/components/data-display/Modal";
+import useToggle from "@/presentation/hooks/ui/useToggle";
+const datas = [
+    {
+        names: "Carlos",
+        first_last_name: "Ramírez",
+        second_last_name: "López",
+        date_birth: "1985-07-12",
+        year_old: 39,
+        email: "carlos.ramirez@example.com",
+        telephone: "555-123-4567",
+        address: "Av. Insurgentes Sur 1234, CDMX",
+        gender: "Masculino",
+        curp: "RALC850712HDFMZR09",
+        rfc: "RAL8507125J1",
+        nss: "98765432101",
+        ine_number: "1234567890123",
+        alergy: "Ninguna",
+        emergency_contact: [
+            {
+                name: "María López",
+                relationship: "Esposa",
+                phone: "555-987-6543"
+            }
+        ],
+        nacionality: "Mexicana",
+        status: "ACTIVE",
+        blood_type: "O+",
+        status_civil: "Casado/a",
+        position_id: 2
+    }
+]
 const Empleado = () => {
     const { isToggled, handleToggle } = useToggle();
+    const [isDocument, setIsDocument] = useState(true);
     const driverObj = driver({
         showProgress: true,
         nextBtnText: "Siguiente",
@@ -38,6 +73,10 @@ const Empleado = () => {
             },
         ]
     });
+
+
+    const columns = useColumnEmployees({ handleAction: () => setIsDocument(true) });
+
     return (
         <div className="bg-white border border-gray-200 px-5 py-2 rounded-lg">
             <HeaderInfo
@@ -48,34 +87,6 @@ const Empleado = () => {
             />
             <div className="relative overflow-x-auto">
                 <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white ">
-                    <label htmlFor="table-search" className="sr-only">
-                        Search
-                    </label>
-                    <div className="relative">
-                        <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <svg
-                                className="w-4 h-4 text-gray-500 "
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 20 20"
-                            >
-                                <path
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                                />
-                            </svg>
-                        </div>
-                        <input
-                            type="text"
-                            id="table-search-users"
-                            className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Search for users"
-                        />
-                    </div>
 
 
                     <Button
@@ -87,35 +98,13 @@ const Empleado = () => {
 
                 </div>
 
-                <Table
-                    columns={[
-                        { key: 'id', label: 'ID', className: 'px-6 py-3' },
-                        { key: 'name', label: 'Nombre del Area', className: 'px-6 py-3' },
-                        { key: 'abbreviation', label: 'Abreviación', className: 'px-6 py-3' },
-                        {
-                            key: 'actions',
-                            label: 'Acciones',
-                            className: 'px-6 py-3',
-                            render: () => (
-                                <div className="flex items-center gap-2">
-                                    <button className="text-blue-500 hover:text-blue-700">Editar</button>
-                                    <button className="text-red-500 hover:text-red-700">Eliminar</button>
-                                </div>
-                            )
-                        }
-                    ]}
-                    data={[
-                        { id: 1, name: 'Recursos Humanos', abbreviation: 'RH' },
-                        { id: 2, name: 'Finanzas', abbreviation: 'FIN' },
-                        { id: 3, name: 'Marketing', abbreviation: 'MKT' }
-                    ]}
-                    page={1}
-                    totalPages={1}
-                    onPageChange={() => { }}
-
+                <TableStack
+                    data={datas || []}
+                    columns={columns}
+                    isFilters={false}
                 />
             </div>
-            
+
             {
                 isToggled &&
                 <Modal
@@ -124,9 +113,55 @@ const Empleado = () => {
                     title="Agregar un nuevo empleado"
                     paragraph="Gestiona sin esfuerzo el alta de nuevo personal"
                 >
-                    <FormEmpleadoComponent/>
+                    <FormEmpleadoComponent />
                 </Modal>
             }
+
+            {
+                isDocument &&
+                <Modal
+                    open={isDocument}
+                    onClose={() => setIsDocument(false)}
+                    title={`Documentos ${'Carlos'}`}
+                    paragraph="Gestiona sin esfuerzo el alta de nuevo personal"
+                >
+                    <main>
+                        <button>
+                            Agregar
+                        </button>
+                        <section className="grid grid-cols-4 py-5 gap-5">
+                            {
+                                new Array(5).fill(0).map((_, index) => (
+                                    <div className="bg-gray-50 p-2 rounded-lg border border-gray-200 flex flex-col items-start gap-4 relative">
+                                        <span className="bg-primary text-xs text-white px-3  absolute top-0 left-0">Curp {index}</span>
+                                        <img className="w-11 h-11 mt-5" src={pdf} alt="" />
+                                        <div>
+                                            <Typography.P className="text-xs font-medium">Documentos.pdf</Typography.P>
+                                            <Typography.P className="text-xs font-medium">4.5 MB</Typography.P>
+                                        </div>
+                                        <div className="absolute top-2 right-2">
+                                            <div className="group relative">
+                                                <RxDotsVertical />
+
+                                                <div className="hidden group-hover:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white border border-gray-200 rounded-lg  ">
+                                                    <button
+                                                        className="py-1 hover:bg-gray-100 flex items-center gap-4 px-2 rounded-lg text-sm">
+                                                        Editar
+                                                    </button>
+
+                                                    <hr className='border-b border-dotted border-gray-200' />
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </section>
+                    </main>
+                </Modal>
+            }
+
         </div>
     )
 }
